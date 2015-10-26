@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Parse intro</title>
+		
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 		
@@ -15,26 +16,30 @@
     		
             <!-- Here is where you should build your form.  
                 You can make it look nicer with bootstrap classes like "form-input" -->
-            <h1> Music to listen to </h1>
+            <h1> Review </h1>
+			<div id = "average"></div>
             <form>
-            <label for="band">Band Name</label><br>
-                <input class="form-control" type="text" id="bandName">
-            </div>
-            <div>
-            <label for="band">Website</label><br>
-                <input class="form-control" type="text" id="website">
-            </div>
-            <div>
-            <label for="band">Best song</label><br>
-                <input class="form-control" type="text" id="bestSong">
-            <button class="btn btn-primary" type="submit"> Add Band </button>
+				<div class="form-group">
+					<label for="review_title">Review Title</label><br>
+					<input class="form-control" type="text" id="review_title">
+				</div>
+				<div class="form-group">
+					<label for="review_body">Body</label><br>
+					<input class="form-control" type="text" id="review_body">
+				</div>
+				<div class="form-group">
+					<label for="review_rating">Rating</label><br>
+					<input class="form-control" type="number" min="1" max = "5" id="review_rating">
+				</div>
+				<button class="btn btn-primary" type="submit"> Save </button>
             </form>
             
     	</div>
         <div class="container">
-            <ol id="list">
-            </ol>
+            <ul id="list">
+            </ul>
         </div>
     </body>
-    <script type="text/javascript" src="js/music.js"></script>
+	<script type="text/javascript" src="lib/jquery.raty.js"></script>
+    <script type="text/javascript" src="js/review.js"></script>
 </html>
