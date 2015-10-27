@@ -1,2 +1,11 @@
-/* If you want to add some styles, do it here -- 
-make sure to read the file into your index.html file! */
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+body {
+	font-family: 'Raleway', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+}
+  
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Raleway', sans-serif; 
+	font-weight: 700;
+}
