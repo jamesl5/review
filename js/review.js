@@ -15,8 +15,9 @@ $('form').submit(function() {
 	
 	var review = new Review();	
 	var rating = $('#rating').raty('score');
+	var title = $('#review_title').val();
 	var body = $('#review_body').val();
-	review.set('review_title', $('#review_title').val());
+	review.set('review_title', title);
 	review.set('review_body', body);
 	review.set('review_rating', rating);
 	review.save(null, {
@@ -75,7 +76,7 @@ var addItem = function(item) {
 	var rating = item.get('review_rating');
 	
 	// Append li that includes text from the data item
-	var form = $("<form></form>");
+	var form = $("<form id='review'></form>");
 	$('#reviews').append(form);
 	var row = $("<div class='row'><div id='rated'></div></div>");
 	$('form').append(row);

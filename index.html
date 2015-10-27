@@ -7,26 +7,28 @@
 		
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-		
+		<link rel="stylesheet" href="css/main.css">
         <!-- Include parse library here -->
         <script src="//www.parsecdn.com/js/parse-1.6.0.min.js"></script>
     </head>
     <body>
+		<header>
+			<h1> Review </h1>
+			<div id = "average"></div>
+		</header>
     	<div class="container">
     		
             <!-- Here is where you should build your form.  
                 You can make it look nicer with bootstrap classes like "form-input" -->
-            <h1> Review </h1>
-			<div id = "average"></div>
-            <form>
+
+			
+            <form id="review-group">
 				<div class="form-group">
 					<div id = "rating"></div>
-					<label for="review_title">Review Title</label><br>
-					<input class="form-control" type="text" id="review_title">
+					<input class="form-control" placeholder="Review Title" type="text" id="review_title">
 				</div>
 				<div class="form-group">
-					<label for="review_body">Body</label><br>
-					<textarea class="form-control" type="text" id="review_body"></textarea>
+					<textarea class="form-control" placeholder="Review Body" type="text" id="review_body"></textarea>
 				</div>
 				<button class="btn btn-primary" type="submit"> Save </button>
             </form>
