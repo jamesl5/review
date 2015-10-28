@@ -1,114 +1,164 @@
+
+//This file is for building simple review page in which people can post up their reviews and rate them.
+
+
 // Initialize Parse app
 Parse.initialize('5ZUKzcsOobn0VZza2IcvHdiAAv2LxHajSWqFmBX6', 'rqwnj98pPdSTOeKPIGKAy3Oawd5JCmEKpyQLEiat');
 
 var Review = Parse.Object.extend('Review');
-$(document).ready(function(){
-	
 
-$('#rating').raty({ 
-	path: 'images',
-	score: 3
-	
-});
-// Click event when form is submitted
-$('form').submit(function() {
-	
-	var review = new Review();	
-	var rating = $('#rating').raty('score');
-	var title = $('#review_title').val();
-	var body = $('#review_body').val();
-	review.set('review_title', title);
-	review.set('review_body', body);
-	review.set('review_rating', rating);
-	review.save(null, {
-		success:getData
-	})
-	return false
-})
+//created instance outside of other functions in order to prevent spamming of reviews.
+//(need to refresh the page to write more reviews)
+var review = new Review();		
 
-
-
-// Write a function to get data
-var getData = function() {
-	
-	// Set up a new query for our Music class
-	var query = new Parse.Query(Review)
-
-	// Set a parameter for your query -- where the website property isn't missing
-	// query.notEqualTo('title', '')
-
-	/* Execute the query using ".find".  When successful:
-	    - Pass the returned data into your buildList function
-	*/
-	
-	query.find({
-		success:function(results) {
-			buildList(results)
-		} 
-	})
-}
-
-// A function to build your list
-var buildList = function(data) {
-	// Empty out your ordered list
-	$('ul').empty()
-	var total = 0;
-	// Loop through your data, and pass each element to the addItem function
-	data.forEach(function(d){
-		total += addItem(d);
-	})
-	var avg = total/data.length;
-	$('#average').raty({ 
+		
+	$('#rating').raty({ 
 		path: 'images',
-		readOnly : true,
-		score : avg
+		score: 3
+		
 	});
-}
-var total = function(item){
-	var rating = item.get('review_rating')
-}
-
-// This function takes in an item, adds it to the screen
-var addItem = function(item) {
-	// Get parameters (website, band, song) from the data item passed to the function
-	var title = item.get('review_title');
-	var body = item.get('review_body');
-	var rating = item.get('review_rating');
-	
-	// Append li that includes text from the data item
-	var form = $("<form id='review'></form>");
-	$('#reviews').append(form);
-	var row = $("<div class='row'><div id='rated'></div></div>");
-	$('form').append(row);
-	$('div:last').raty({ 
-		path: 'images',
-		readOnly : true,
-		score : rating
-	});
-	row = $("<div class='row'><div id='title'></div></div>");
-	$('form').append(row);
-	$('div:last').text(title);
-	row = $("<div class='row'><div id='body'></div></div>");
-	$('form').append(row);
-	$('div:last').text(body);
-	//var li = $('<li><h1>' + title + '</h1><br>' + body + '</li>' );
-	
-	// Create a button with a <span> element (using bootstrap class to show the X)
-	/*var button = $('<button class="btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>');
-	
-	// Click function on the button to destroy the item, then re-call getData
-	button.click(function() {
-		item.destroy({
+	// Click event when form is submitted
+	$('form').submit(function() {
+		//create review instance.
+		
+		var rating = $('#rating').raty('score');
+		var title = $('#review_title').val();
+		var body = $('#review_body').val();
+		review.set('review_title', title);
+		review.set('review_body', body);
+		review.set('review_rating', rating);
+		review.set('review_like', 0);
+		review.set('review_dislike', 0);
+		review.save(null, {
 			success:getData
+		}).then(function(){
+			$('#rating').raty('set', {
+				option:3
+			});
+			$('#review_title').val('');
+			$('#review_body').val('');
 		})
+		return false
 	})
-	
-	// Append the button to the li, then the li to the olF
-	li.append(button);*/
-	//
-	return rating;
-}
 
-// Call your getData function when the page loads
-getData()
+	//function to get data from the database
+	var getData = function() {
+		//make an instance to look through data
+		var query = new Parse.Query(Review)
+		//find data(any), and start building list
+		query.find({
+			success:function(results) {
+				buildList(results)
+			} 
+		})
+	}
+
+	//build up list of reviews
+	var buildList = function(data) {
+
+		//empty out the review list section
+		$('section').empty()
+		var total = 0;
+		
+		//append each data in the database and add the total rating values.
+		data.forEach(function(d){
+			total += addItem(d);
+		})
+		//find the average rating and post stars on the page
+		var avg = total/data.length;
+		$('#average').raty({ 
+			path: 'images',
+			readOnly : true,
+			score : avg
+		});
+	}
+
+	//add each review in the list
+	var addItem = function(item) {
+
+		//elements to be added on each review.
+		var title = item.get('review_title');
+		var body = item.get('review_body');
+		var rating = item.get('review_rating');
+		var upVote = item.get('review_like');
+		var totalVote = item.get('review_dislike')+upVote;
+		var thumbUp = $("<button class='btn'><span class='vote'><i class='fa fa-thumbs-o-up fa-2x'></i></span></button>");
+		var thumbDown = $("<button class='btn'><span class='vote'><i class='fa fa-thumbs-o-down fa-2x'></i></span></button>");
+		var button = $('<button class="btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>');
+		var stars = $("<span id = 'stars'>").raty({ 
+						path: 'images',
+						readOnly : true,
+						score : rating
+					});	
+		
+		//create a form for a review and append to the review section
+		var form = $("<form id='review'></form>");
+		$('#reviews').append(form);
+		//create a row and columns
+		var row = $("<div class='row'></div>");
+		var col1 = $("<div id= 'rate' class='col-sm-11'></div>");
+		var col2 = $("<div id= 'cross' class='col-sm-1'></div>");
+		
+		//append a row and comlumns
+		(form).append(row);
+		(row).append(col1);
+		(row).append(col2);
+		//append rating stars and delete button
+		(col1).append(stars);
+		(col2).append(button);
+		
+		//append another row for title
+		row = $("<div class='row'><div id='title'></div></div>");
+		(form).append(row);
+		$('div:last').text(title);
+		
+		//append another row for body
+		row = $("<div class='row'><div id='body' ></div></div>");
+		(form).append(row);
+		$('div:last').text(body);
+		
+		//create and append a row & comlumns
+		row = $("<div class='row'></div>");
+		col1 = $("<div id= 'vote_result' class='col-sm-10'></div>");
+		col2 = $("<div id= 'icon' class='col-sm-2'></div>");
+		(form).append(row);
+		(row).append(col1);
+		(row).append(col2);
+		
+		//append vote counts and vote buttons
+		(col1).append(upVote + " out of " + totalVote + " found this review helpful ");
+		(col2).append(thumbUp);
+		(col2).append(thumbDown);
+		
+		//destroys a review if delete button is clicked
+		button.click(function() {
+			item.destroy({
+				success:getData
+			})
+			return false;
+		});
+		
+		//increment either like count or dislike count depending on which thumb is clicked.
+		thumbUp.click(function(){
+			item.increment('review_like');
+			item.save(null, {
+				success:getData
+			});
+			return false;
+		});
+		thumbDown.click(function(){
+			item.increment('review_dislike');
+			item.save(null, {
+				success:getData
+			});
+			return false;
+		});
+		
+		//return the rating value to sum up.
+		return rating;
+	}
+
+//finally get data to build lists when page is ready
+$(document).ready(function(){
+	getData();
 });
