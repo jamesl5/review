@@ -1,5 +1,9 @@
 When you create your project (or at some point before submission), you must create a Readme.md file that describes your project. In addition to a short description, please include the following information:
 
+THIS WEBSITE LETS PEOPLE WRITE REVIEWS. SIMPLE RATING AND VOTING FUNCTIONS ARE ADDED AS WELL.
+URL of website : http://students.washington.edu/jamesl5/info343/review/
+
+
 Did you receive help from any other sources (classmates, etc.)? If so, please list who.
 - Nichelle and Sang helped me in some aspects.
 Did you complete any advanced extensions to this challenge? If so, what?
